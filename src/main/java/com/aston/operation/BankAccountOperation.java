@@ -1,10 +1,11 @@
 package com.aston.operation;
 
 import com.aston.api.BankAccountData;
+import com.aston.repository.BankAccount;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 public interface BankAccountOperation {
-    List<BankAccountData> execute(@NotNull BankAccountData data);
+    List<BankAccount> execute(@NotNull BankAccountData data);
 }

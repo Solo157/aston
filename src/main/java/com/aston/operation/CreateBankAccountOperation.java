@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.aston.utils.converter.BankAccountConverter.createBankAccountData;
 import static com.aston.utils.converter.BankAccountConverter.createBankAccountEntity;
 import static com.aston.validation.BankAccountDataValidation.*;
 
@@ -31,10 +30,10 @@ public class CreateBankAccountOperation implements BankAccountOperation {
 
     @Override
     @Transactional
-    public List<BankAccountData> execute(BankAccountData data) {
+    public List<BankAccount> execute(BankAccountData data) {
         isNameValid(data.getName());
         isPinCodeValid(data.getPinCode());
         BankAccount account = repository.save(createBankAccountEntity(data));
-        return List.of(createBankAccountData(account));
+        return List.of(account);
     }
 }

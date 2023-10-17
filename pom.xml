@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.1.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.aston</groupId>
 	<artifactId>aston</artifactId>
@@ -58,7 +58,11 @@
             <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
-
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.15.1</version>
+		</dependency>
     </dependencies>
 
 	<build>

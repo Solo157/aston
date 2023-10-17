@@ -2,9 +2,12 @@ package com.aston.service;
 
 import com.aston.api.BankAccountData;
 import com.aston.operation.BankAccountOperationManager;
+import com.aston.repository.BankAccount;
 import com.aston.repository.BankAccountRepository;
 import com.aston.utils.converter.BankAccountConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import static com.aston.utils.converter.BankAccountConverter.createBankAccountData;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +26,7 @@ public class BankAccountService {
         this.operationManager = operationManager;
     }
 
+    @Transactional
     public List<BankAccountData> getBankAccounts() {
         return repository.findAll().stream()
                 .map(BankAccountConverter::createBankAccountData)
@@ -30,18 +34,28 @@ public class BankAccountService {
     }
 
     public BankAccountData createBankAccount(BankAccountData accountData) {
-        return operationManager.getBankAccountOperation(CREATE).execute(accountData).get(0);
+        BankAccount account = operationManager.getBankAccountOperation(CREATE).execute(accountData).get(0);
+        BankAccountData bankAccountData = createBankAccountData(account);
+        bankAccountData.setNumber(account.getNumber());
+        return bankAccountData;
     }
 
     public BankAccountData depositAmountToBankAccount(BankAccountData accountData) {
-        return operationManager.getBankAccountOperation(DEPOSIT).execute(accountData).get(0);
+        return createBankAccountData(
+                operationManager.getBankAccountOperation(DEPOSIT).execute(accountData).get(0)
+        );
     }
 
     public BankAccountData withdrawAmountFromBankAccount(BankAccountData accountData) {
-        return operationManager.getBankAccountOperation(WITHDRAW).execute(accountData).get(0);
+        return createBankAccountData(
+                operationManager.getBankAccountOperation(WITHDRAW).execute(accountData).get(0)
+        );
     }
 
     public List<BankAccountData> transferAmountToAnotherBankAccount(BankAccountData accountData) {
-        return operationManager.getBankAccountOperation(TRANSFER).execute(accountData);
+        return operationManager.getBankAccountOperation(TRANSFER).execute(accountData)
+                .stream()
+                .map(BankAccountConverter::createBankAccountData)
+                .toList();
     }
 }

@@ -1,10 +1,10 @@
-package com.aston.utils;
+package com.aston.utils.converter;
 
 import java.math.BigDecimal;
 
 import static java.math.RoundingMode.HALF_UP;
 
-public class MoneyConversionUtil {
+public class MoneyConverter {
 
     public static BigDecimal toMoneyBigDecimal(Long value) {
         return new BigDecimal(value).divide(BigDecimal.valueOf(100), 2, HALF_UP);

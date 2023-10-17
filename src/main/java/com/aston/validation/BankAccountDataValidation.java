@@ -1,6 +1,6 @@
 package com.aston.validation;
 
-import com.aston.repository.BankAccount;
+import com.aston.exception.NotValidRequestException;
 import com.aston.repository.BankAccountRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,33 +28,32 @@ public class BankAccountDataValidation {
         if (name.length() < 1
                 || name.length() > 200
                 || !name.matches("[a-zA-Z0-9]+")) {
-            throw new IllegalArgumentException();
+            throw new NotValidRequestException("Name must be more then 1 and less then 200 and equal [a-zA-Z0-9]+");
         }
     }
 
     public static void isPinCodeValid(Integer pinCode) {
         if (pinCode.toString().length() != 4) {
-            throw new IllegalArgumentException();
+            throw new NotValidRequestException("PinCode's length must be equal 4");
         }
     }
 
-    public static void isAccountNumberValid(String number) {
-        if (number.length() != 10) {
-            throw new IllegalArgumentException();
+    public static void isAccountNumberValid(Long number) {
+        if (number.toString().length() != 10) {
+            throw new NotValidRequestException("Number's length must be equal 10");
         }
-        BankAccount account = repository.findByNumber(number);
-        if (account == null) {
-            throw new IllegalArgumentException();
+        if (!repository.existsBankAccountByNumber(number)) {
+            throw new NotValidRequestException("Account is not found");
         }
     }
 
-    public static void isToAccountNumberValid(String number) {
+    public static void isToAccountNumberValid(Long number) {
         isAccountNumberValid(number);
     }
 
     public static void isAmountValid(BigDecimal amount) {
         if (amount == null || amount.compareTo(ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new NotValidRequestException("Amount is not valid");
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.aston.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

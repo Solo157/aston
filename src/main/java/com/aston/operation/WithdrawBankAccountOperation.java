@@ -12,8 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.aston.utils.MoneyConversionUtil.toMoneyLong;
-import static com.aston.utils.converter.BankAccountConverter.createBankAccountData;
+import static com.aston.utils.converter.MoneyConverter.toMoneyLong;
 import static com.aston.validation.BankAccountDataValidation.*;
 
 @Getter
@@ -31,7 +30,7 @@ public class WithdrawBankAccountOperation implements BankAccountOperation {
 
     @Override
     @Transactional
-    public List<BankAccountData> execute(BankAccountData data) {
+    public List<BankAccount> execute(BankAccountData data) {
         isAmountValid(data.getDebitAmount());
         isPinCodeValid(data.getPinCode());
         isAccountNumberValid(data.getNumber());
@@ -40,14 +39,14 @@ public class WithdrawBankAccountOperation implements BankAccountOperation {
         checkAccountsOnCorrection(account, data);
         account.setAmount(account.getAmount() - toMoneyLong(data.getDebitAmount()));
 
-        return List.of(createBankAccountData(repository.save(account)));
+        return List.of(repository.save(account));
     }
 
     private void checkAccountsOnCorrection(BankAccount account, BankAccountData data) {
-        if (account == null) throw new IllegalArgumentException();
+        if (account == null) throw new NullPointerException("Account is null");
         long accountFutureAmount = account.getAmount() - toMoneyLong(data.getDebitAmount());
         boolean pinCodesInEquality = !account.getPinCode().equals(data.getPinCode());
-        if (pinCodesInEquality) throw new IllegalArgumentException();
-        if (accountFutureAmount < 0) throw new IllegalArgumentException();
+        if (pinCodesInEquality) throw new IllegalStateException("Pin code is wrong");
+        if (accountFutureAmount < 0) throw new IllegalStateException("Withdraw's amount is bigger then account amount");
     }
 }

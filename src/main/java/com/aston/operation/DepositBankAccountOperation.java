@@ -12,8 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.aston.utils.MoneyConversionUtil.toMoneyLong;
-import static com.aston.utils.converter.BankAccountConverter.createBankAccountData;
+import static com.aston.utils.converter.MoneyConverter.toMoneyLong;
 import static com.aston.validation.BankAccountDataValidation.isAccountNumberValid;
 import static com.aston.validation.BankAccountDataValidation.isAmountValid;
 
@@ -32,11 +31,11 @@ public class DepositBankAccountOperation implements BankAccountOperation {
 
     @Override
     @Transactional
-    public List<BankAccountData> execute(BankAccountData data) {
+    public List<BankAccount> execute(BankAccountData data) {
         isAccountNumberValid(data.getNumber());
         isAmountValid(data.getCreditAmount());
         BankAccount account = repository.findAndLockByNumber(data.getNumber());
         account.setAmount(account.getAmount() + toMoneyLong(data.getCreditAmount()));
-        return List.of(createBankAccountData(repository.save(account)));
+        return List.of(repository.save(account));
     }
 }
