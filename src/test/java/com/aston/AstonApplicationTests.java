@@ -54,7 +54,7 @@ class AstonApplicationTests {
 
 		for (int i = 0; i < threadCount; i++) {
 			Thread thread = new Thread(() -> {
-				BankAccountData bankAccountData = service.addSumToBankAccount(data);
+				BankAccountData bankAccountData = service.depositAmountToBankAccount(data).get(0);
 				sumList.add(bankAccountData.getAmount());
 			});
 

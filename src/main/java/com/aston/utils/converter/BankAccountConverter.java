@@ -4,37 +4,44 @@ import com.aston.api.BankAccountData;
 import com.aston.repository.BankAccount;
 import org.springframework.stereotype.Component;
 
+import java.util.Random;
 import java.util.UUID;
 
 import static com.aston.utils.MoneyConversionUtil.toMoneyBigDecimal;
 import static com.aston.utils.MoneyConversionUtil.toMoneyLong;
+import static com.aston.validation.BankAccountDataValidation.isNameValid;
+import static com.aston.validation.BankAccountDataValidation.isPinCodeValid;
 
 @Component
 public class BankAccountConverter {
 
     public static BankAccount createBankAccountEntity(BankAccountData data) {
-        BankAccount entity = new BankAccount();
+        isNameValid(data.getName());
+        isPinCodeValid(data.getPinCode());
+        return new BankAccount(
+                data.getId() == null ? UUID.randomUUID() : data.getId(),
+                data.getNumber() == null ? getRandomBankAccountNumber(10) : data.getNumber(),
+                data.getName(),
+                data.getPinCode(),
+                data.getAmount() == null ? 0L : toMoneyLong(data.getAmount())
+        );
+    }
 
-        if (data.isNameValid() && data.isPinCodeValid()) {
-            entity.setName(data.getName());
-            entity.setPinCode(data.getPinCode());
+    private static String getRandomBankAccountNumber(Integer length) {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int digit = random.nextInt(10);
+            sb.append(digit);
         }
-        if (data.isSumValid())
-            entity.setAmount(toMoneyLong(data.getAmount()));
-        else
-            entity.setAmount(0L);
-
-        entity.setId(UUID.randomUUID());
-
-        return entity;
+        return sb.toString();
     }
 
     public static BankAccountData createBankAccountData(BankAccount entity) {
-        BankAccountData data = new BankAccountData();
-        if (entity.getId() != null) data.setId(entity.getId());
-        if (entity.getName() != null) data.setName(entity.getName());
-        if (entity.getPinCode() != null) data.setPinCode(entity.getPinCode());
-        if (entity.getAmount() != null) data.setAmount(toMoneyBigDecimal(entity.getAmount()));
-        return data;
+        return new BankAccountData(
+                entity.getName(),
+                entity.getNumber(),
+                toMoneyBigDecimal(entity.getAmount())
+        );
     }
 }
