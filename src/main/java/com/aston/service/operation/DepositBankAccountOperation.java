@@ -1,4 +1,4 @@
-package com.aston.operation;
+package com.aston.service.operation;
 
 import com.aston.api.BankAccountData;
 import com.aston.repository.BankAccount;
@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.aston.utils.converter.MoneyConverter.toMoneyLong;
-import static com.aston.validation.BankAccountDataValidation.isAccountNumberValid;
-import static com.aston.validation.BankAccountDataValidation.isAmountValid;
+import static com.aston.utils.validation.BankAccountDataValidation.isAccountNumberValid;
+import static com.aston.utils.validation.BankAccountDataValidation.isAmountValid;
 
 @Getter
 @Setter

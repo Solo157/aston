@@ -1,7 +1,7 @@
 package com.aston.service;
 
 import com.aston.api.BankAccountData;
-import com.aston.operation.BankAccountOperationManager;
+import com.aston.service.operation.BankAccountOperationManager;
 import com.aston.repository.BankAccount;
 import com.aston.repository.BankAccountRepository;
 import com.aston.utils.converter.BankAccountConverter;
@@ -12,7 +12,7 @@ import static com.aston.utils.converter.BankAccountConverter.createBankAccountDa
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.aston.operation.BankAccountOperationManager.AccountOperation.*;
+import static com.aston.service.operation.BankAccountOperationManager.AccountOperation.*;
 
 @Service
 public class BankAccountService {

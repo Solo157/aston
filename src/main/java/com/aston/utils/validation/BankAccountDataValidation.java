@@ -1,4 +1,4 @@
-package com.aston.validation;
+package com.aston.utils.validation;
 
 import com.aston.exception.NotValidRequestException;
 import com.aston.repository.BankAccountRepository;

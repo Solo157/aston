@@ -4,12 +4,10 @@ import com.aston.api.BankAccountData;
 import com.aston.repository.BankAccount;
 import org.springframework.stereotype.Component;
 
-import java.util.Random;
-
 import static com.aston.utils.converter.MoneyConverter.toMoneyBigDecimal;
 import static com.aston.utils.converter.MoneyConverter.toMoneyLong;
-import static com.aston.validation.BankAccountDataValidation.isNameValid;
-import static com.aston.validation.BankAccountDataValidation.isPinCodeValid;
+import static com.aston.utils.validation.BankAccountDataValidation.isNameValid;
+import static com.aston.utils.validation.BankAccountDataValidation.isPinCodeValid;
 
 @Component
 public class BankAccountConverter {
